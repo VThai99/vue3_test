@@ -1,27 +1,37 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
 import IconFirst from '../../../components/icons/IconFirst.vue';
-import IconPrevious from '../../../components/icons/IconPrevious.vue';
 import IconLast from '../../../components/icons/IconLast.vue';
 import IconNext from '../../../components/icons/IconNext.vue';
+import IconPrevious from '../../../components/icons/IconPrevious.vue';
+// import { defineProps } from 'vue';
+const props = defineProps<{
+	pageNumber: number,
+	totalPage: number,
+}>()
+const emit = defineEmits(['changePage'])
+const {pageNumber, totalPage} = props;
+console.log(pageNumber);
 
-const pageAtt = reactive({ page: 3 });
-const arrayPage = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const handleSelectPage = (item: number) => {
+	// console.log(pageNumber);
+	
+	emit('changePage', item)
+};
+
 const previousPage = () => {
-	if (pageAtt.page > 1) pageAtt.page -= 1;
+	if (pageNumber > 1) 
+	emit('changePage', pageNumber - 1 )
 };
 const nextPage = () => {
 	if (pageAtt.page < arrayPage.length) pageAtt.page += 1;
 };
 const firstPage = () => {
-	pageAtt.page = 1;
+	// pageAtt.page = 1;
 };
 const lastPage = () => {
-	pageAtt.page = arrayPage.length;
+	// pageAtt.page = arrayPage.length;
 };
-const handleSelectPage = (item: number) => {
-	pageAtt.page = item;
-};
+
 </script>
 <template>
 	<div class="page_nav">
@@ -39,14 +49,14 @@ const handleSelectPage = (item: number) => {
 		</li>
 		<li
 			class="prefix"
-			v-if="pageAtt.page - 2 > 1"
+			v-if="pageNumber - 2 > 1"
 		>
 			...
 		</li>
-		<template v-for="item in arrayPage">
+		<template v-for="item in totalPage" key="item">
 			<li
-				:class="[item === pageAtt.page ? 'active' : '', 'page_item']"
-				v-if="pageAtt.page - 2 <= item && item <= pageAtt.page + 2"
+				:class="[item === pageNumber ? 'active' : '', 'page_item']"
+				v-if="pageNumber - 2 <= item && item <= pageNumber + 2"
 				@click="handleSelectPage(item)"
 			>
 				{{ item }}
@@ -54,7 +64,7 @@ const handleSelectPage = (item: number) => {
 		</template>
 		<li
 			class="prefix"
-			v-if="pageAtt.page + 2 < arrayPage.length"
+			v-if="pageNumber + 2 < totalPage"
 		>
 			...
 		</li>

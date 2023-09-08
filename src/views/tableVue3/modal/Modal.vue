@@ -25,7 +25,7 @@ defineProps<{
 						</div>
 						<div class="modal_footer">
 							<button @click="$emit('closeModal')">Cancel</button>
-							<button @click="$emit('addNew')">Add</button>
+							<button @click="$emit('save')">Save</button>
 						</div>
 					</div>
 				</div>
@@ -62,8 +62,8 @@ defineProps<{
 	background-color: white;
 	border: none;
 	border-radius: 16px;
-	width: 700px;
-	height: 300px;
+	width: 900px;
+	height: 320px;
 }
 .modal_header {
 	display: flex;
@@ -74,6 +74,7 @@ defineProps<{
 .modal_body {
 	flex-grow: 1;
 	color: black;
+	margin: 2rem;
 }
 
 .modal_footer {

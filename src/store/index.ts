@@ -2,22 +2,31 @@ import { createStore } from 'vuex'
 
 const store = createStore({
   state: {
-    dumyData: [
+    tableData: [
       {
-        id: 111,
-        title: 'Todo1',
-        status: 'checked'
+        id: 1,
+        name: 'Tran Van A',
+        age: '25',
+        gender: 'Male',
+        phone: '098763446',
+        address: 'New York',
       },
       {
-        id: 112,
-        title: 'Todo2',
-        status: 'checked'
+        id: 2,
+        name: 'Tran Van b',
+        age: '27',
+        gender: 'Male',
+        phone: '097676446',
+        address: 'Ha Noi',
       },
       {
-        id: 113,
-        title: 'Todo3',
-        status: 'unchecked'
-      }
+        id: 3,
+        name: 'Nguyen Mai Phuong',
+        age: '19',
+        gender: 'Female',
+        phone: '0975658755',
+        address: 'New York',
+      },
     ],
     count: 1
   },
@@ -26,10 +35,10 @@ const store = createStore({
     increment(state: any, payload: any) {
       state.count += payload.amount
     },
-    addTodo(state: any, payload: any) {
-      state.dumyData.push(payload.newTodo)
+    addPerson(state: any, payload: any) {
+      state.tableData.push(payload.newPerson)
     },
-    deleteTodo(state: any, payload: any){
+    deleteTable(state: any, payload: any){
       state.dumyData = state.dumyData.filter((item: any) => item.id !== payload.id)
     }
   },
