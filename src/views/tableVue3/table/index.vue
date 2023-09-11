@@ -1,29 +1,78 @@
 <script setup lang="ts">
-defineProps<{
-	data?: any
-}>()
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+const props = defineProps<{
+	data?: any;
+	chosedAll: boolean;
+	chosedList: any;
+}>();
+const emit = defineEmits(['chosedHandle', 'chosedAll']);
+const data = computed(() => props.data);
+const chosedArr = computed(() => props.chosedList);
+const chosedAllCom = computed(() => props.chosedAll);
+const store = useStore();
+const updateChosed = (value: number) => {
+	emit('chosedHandle', value);
+};
+const handleGetPerson = (id: number) => {
+	
+};
 </script>
 <template>
 	<div>
-		<table border="1" class="table_style">
+		<table
+			border="1"
+			class="table_style"
+		>
 			<thead>
 				<tr>
-					<td><input type="checkbox"></td>
+					<td>
+						<input
+							type="checkbox"
+							:checked="chosedAllCom"
+							@change="emit('chosedAll')"
+						/>
+					</td>
 					<td>Name</td>
 					<td>Age</td>
 					<td>Gender</td>
 					<td>Phone Number</td>
 					<td>Address</td>
+					<td>Action</td>
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="item in data">
-					<td><input type="checkbox"></td>
+				<tr
+					v-for="item in data"
+					:key="item.id"
+				>
+					<td>
+						<input
+							type="checkbox"
+							:checked="chosedArr.includes(item.id)"
+							@change="
+								() => {
+									updateChosed(item.id);
+								}
+							"
+						/>
+					</td>
 					<td>{{ item.name }}</td>
 					<td>{{ item.age }}</td>
 					<td>{{ item.gender }}</td>
 					<td>{{ item.phone }}</td>
 					<td>{{ item.address }}</td>
+					<td>
+						<span
+							@click="
+								() => {
+									handleGetPerson(item.id);
+								}
+							"
+							>Edit</span
+						>
+						<span>Delete</span>
+					</td>
 				</tr>
 			</tbody>
 		</table>

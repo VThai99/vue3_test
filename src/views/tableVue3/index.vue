@@ -6,10 +6,12 @@ import Modal from './modal/Modal.vue';
 import { reactive, ref, computed } from 'vue';
 import { useStore } from 'vuex';
 
-const store = useStore()
+const store = useStore();
 const { state, mutations, actions, getters } = store;
 
-const dataTable = computed(() => state.tableData)
+const dataTable = computed(() => state.tableData.length);
+const chosedAll = ref(false);
+const chosedList = ref<number[]>([]);
 const form = reactive({
 	name: '',
 	age: '',
@@ -17,11 +19,37 @@ const form = reactive({
 	phone: '',
 	address: '',
 });
-const page = reactive({ pageSize: '10', pageNumber: 1 })
+
+const formEdit = reactive({
+	name: '',
+	age: '',
+	gender: '',
+	phone: '',
+	address: '',
+});
+
+const page = reactive({ pageSize: '5', pageNumber: 1 });
+
 const show = ref(false);
+
+const paginate = (dataFull: any, size: number, page: number) => {
+	return dataFull.slice((page - 1) * size, page * size);
+};
+
+const dataShow = computed(() => paginate(state.tableData, Number(page.pageSize), page.pageNumber));
+
 const closeModal = () => {
 	show.value = false;
 };
+
+const chosedAllShow = computed(() => {
+	if (chosedList.value.length === dataShow.value.length) {
+		return true;
+	} else {
+		return false;
+	}
+});
+
 const addHandle = () => {
 	store.commit('addPerson', {
 		newPerson: {
@@ -31,63 +59,108 @@ const addHandle = () => {
 			gender: form.gender,
 			phone: form.phone,
 			address: form.address,
-		}
-	})
+		},
+	});
 	Object.assign(form, {
 		name: '',
 		age: '',
 		gender: '',
 		phone: '',
 		address: '',
-	})
-	closeModal()
+	});
+	closeModal();
 };
 const openModal = () => {
 	show.value = true;
 };
 const changeAmount = (amount: string) => {
-	page.pageSize = amount
-}
-
-const paginate = (dataFull: any, size: number, page: number) => {
-	return dataFull.slice((page - 1) * size, page * size)
-}
+	page.pageSize = amount;
+};
 
 const onChangePage = (value: number) => {
-	page.pageNumber = value
-}
+	page.pageNumber = value;
+};
 
-const dataShow = computed(() => paginate(state.tableData, Number(page.pageSize), page.pageNumber))
+const onChosedAll = () => {
+	if (chosedAll.value) {
+		chosedAll.value = false;
+		chosedList.value = [];
+	} else {
+		chosedAll.value = true;
+		chosedList.value = dataShow.value.map((item: any) => item.id);
+	}
+};
 
+const onChosedHandle = (value: number) => {
+	if (chosedList.value.includes(value)) {
+		chosedList.value = chosedList.value.filter((item) => item != value);
+		return;
+	}
+	chosedList.value.push(value);
+};
+
+const onDelete = () => {
+	store.commit('deletePerson', { deleteArr: chosedList.value });
+};
 </script>
 <template>
 	<div>
 		<div class="filter_wrapper">
-			<Filter @handle-add="openModal" @change-amount="changeAmount" :amount="page.pageSize" />
+			<Filter
+				@handle-add="openModal"
+				@change-amount="changeAmount"
+				@delete="onDelete"
+				:amount="page.pageSize"
+			/>
 		</div>
 		<div class="table_wrapper">
-			<Table :data="dataShow" />
+			<Table
+				:data="dataShow"
+				:chosedList="chosedList"
+				:chosedAll="chosedAllShow"
+				@chosed-handle="onChosedHandle"
+				@chosed-all="onChosedAll"
+			/>
 		</div>
 		<div class="pagination_wrapper">
-			<Pagination :page-number="page.pageNumber" :total-page="dataTable.length" @change-page="onChangePage" />
+			<Pagination
+				:page-number="page.pageNumber"
+				:total-page="Math.ceil(dataTable / Number(page.pageSize))"
+				@change-page="onChangePage"
+			/>
 		</div>
 	</div>
-	<Modal :show="show" @closeModal="closeModal" @save="addHandle">
+	<Modal
+		:show="show"
+		@closeModal="closeModal"
+		@save="addHandle"
+	>
 		<template #modal-content>
 			<div class="mt-1 name_age">
 				<div class="flex_style">
 					<span class="label_style">Name: </span>
-					<input v-model="form.name" class="input_style" />
+					<input
+						v-model="form.name"
+						class="input_style"
+					/>
 				</div>
 				<div class="flex_style">
 					<span class="label_style">Age: </span>
-					<input v-model="form.age" class="input_style" />
+					<input
+						v-model="form.age"
+						class="input_style"
+					/>
 				</div>
 			</div>
 
 			<div class="mt-1 flex_style">
 				<span class="label_style">Gender: </span>
-				<select class="input_style" name="" id="" v-model="form.gender">
+				<select
+					class="input_style"
+					name=""
+					id=""
+					v-model="form.gender"
+				>
 					<option value="">Chose your gender</option>
 					<option value="male">Male</option>
 					<option value="female">Female</option>
@@ -96,13 +169,18 @@ const dataShow = computed(() => paginate(state.tableData, Number(page.pageSize),
 
 			<div class="mt-1 flex_style">
 				<span class="label_style">Phone number: </span>
-				<input v-model="form.phone" class="input_style" />
+				<input
+					v-model="form.phone"
+					class="input_style"
+				/>
 			</div>
 			<div class="mt-1 flex_style">
 				<span class="label_style">Address: </span>
-				<input v-model="form.address" class="input_style" />
+				<input
+					v-model="form.address"
+					class="input_style"
+				/>
 			</div>
-
 		</template>
 	</Modal>
 </template>

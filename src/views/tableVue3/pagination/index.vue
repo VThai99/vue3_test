@@ -1,37 +1,34 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import IconFirst from '../../../components/icons/IconFirst.vue';
 import IconLast from '../../../components/icons/IconLast.vue';
 import IconNext from '../../../components/icons/IconNext.vue';
 import IconPrevious from '../../../components/icons/IconPrevious.vue';
 // import { defineProps } from 'vue';
 const props = defineProps<{
-	pageNumber: number,
-	totalPage: number,
-}>()
-const emit = defineEmits(['changePage'])
-const {pageNumber, totalPage} = props;
-console.log(pageNumber);
+	pageNumber: number;
+	totalPage: number;
+}>();
+const emit = defineEmits(['changePage']);
+const pN = computed(() => props.pageNumber);
+const tP = computed(() => props.totalPage);
 
 const handleSelectPage = (item: number) => {
-	// console.log(pageNumber);
-	
-	emit('changePage', item)
+	emit('changePage', item);
 };
 
 const previousPage = () => {
-	if (pageNumber > 1) 
-	emit('changePage', pageNumber - 1 )
+	if (pN.value > 1) emit('changePage', pN.value - 1);
 };
 const nextPage = () => {
-	if (pageAtt.page < arrayPage.length) pageAtt.page += 1;
+	if (pN.value < tP.value) emit('changePage', pN.value + 1);
 };
 const firstPage = () => {
-	// pageAtt.page = 1;
+	emit('changePage', 1);
 };
 const lastPage = () => {
-	// pageAtt.page = arrayPage.length;
+	emit('changePage', tP.value);
 };
-
 </script>
 <template>
 	<div class="page_nav">
@@ -53,7 +50,10 @@ const lastPage = () => {
 		>
 			...
 		</li>
-		<template v-for="item in totalPage" key="item">
+		<template
+			v-for="item in totalPage"
+			:key="item"
+		>
 			<li
 				:class="[item === pageNumber ? 'active' : '', 'page_item']"
 				v-if="pageNumber - 2 <= item && item <= pageNumber + 2"
@@ -88,7 +88,7 @@ const lastPage = () => {
 	gap: 10px;
 }
 .page_item {
-    font-size: 13px;
+	font-size: 13px;
 	display: flex;
 	justify-content: center;
 	align-items: center;

@@ -1,26 +1,41 @@
 <script setup lang="ts">
-defineProps<{
-	amount?: string
-}>()
-const emit = defineEmits(['handleAdd', 'changeAmount']);
+import { computed } from 'vue';
+const props = defineProps<{
+	amount?: string;
+}>();
+const amountItem = computed(() => props.amount);
+const emit = defineEmits(['handleAdd', 'changeAmount', 'delete']);
 const onChangeAmount = (event: any) => {
-	const amount = event.target.value
-	emit('changeAmount', amount)
-}
+	const amount = event.target.value;
+	emit('changeAmount', amount);
+};
 </script>
 <template>
 	<div>filter</div>
 	<div class="feature_wrapper">
-		<button class="button_style delete">Delete</button>
-		<button class="button_style add" @click="emit('handleAdd')">
+		<button
+			class="button_style delete"
+			@click="emit('delete')"
+		>
+			Delete
+		</button>
+		<button
+			class="button_style add"
+			@click="emit('handleAdd')"
+		>
 			Add New
 		</button>
 	</div>
 	<div class="itemPerPage mt-1">
-		<select :value="amount" name="" id="" @change="onChangeAmount">
+		<select
+			:value="amountItem"
+			name=""
+			id=""
+			@change="onChangeAmount"
+		>
+			<option value="5">5</option>
 			<option value="10">10</option>
 			<option value="20">20</option>
-			<option value="50">50</option>
 		</select>
 	</div>
 </template>
