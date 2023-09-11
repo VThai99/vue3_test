@@ -55,7 +55,7 @@ const store = createStore({
 				id: 7,
 				name: 'Tran Van A',
 				age: '25',
-				gender: 'Male',
+				gender: 'Female',
 				phone: '098763446',
 				address: 'New York',
 			},
@@ -91,6 +91,14 @@ const store = createStore({
 				if (!payload.deleteArr.includes(item.id)) return item;
 			});
 		},
+		updatePerson(state: any, payload: any) {
+			const indexUpdate = state.tableData.findIndex((obj: any) => obj.id === payload.id);
+			state.tableData[indexUpdate].id = payload.id,
+			state.tableData[indexUpdate].name = payload.name,
+			state.tableData[indexUpdate].age = payload.age,
+			state.tableData[indexUpdate].gender = payload.gender,
+			state.tableData[indexUpdate].phone = payload.phone,
+			state.tableData[indexUpdate].address = payload.address		},
 	},
 	actions: {
 		// asynchronous handle

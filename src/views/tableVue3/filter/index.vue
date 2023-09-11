@@ -1,17 +1,86 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import IconSearch from '@/components/icons/IconSearch.vue';
 const props = defineProps<{
 	amount?: string;
+	searchField: string;
+	genderFilter: string;
 }>();
 const amountItem = computed(() => props.amount);
-const emit = defineEmits(['handleAdd', 'changeAmount', 'delete']);
+const emit = defineEmits(['search', 'handleAdd', 'changeAmount', 'delete', 'update:searchField', 'update:genderFilter']);
 const onChangeAmount = (event: any) => {
 	const amount = event.target.value;
 	emit('changeAmount', amount);
 };
+const onInput = (event: any) => {
+	emit('update:searchField', event.target.value);
+};
+
+const onSelectGender = (event: any) => {
+	emit('update:genderFilter', event.target.value);
+};
+
 </script>
 <template>
-	<div>filter</div>
+	<div>
+		<div class="search_wrapper">
+			<div class="search">
+				<input
+					:value="searchField"
+					@input="onInput"
+					type="text"
+					placeholder="name, address, phone"
+				/>
+				<button @click="emit('search')"><IconSearch /></button>
+			</div>
+		</div>
+		<div class="sort_check">
+			<div>
+				<span>Sort by:</span>
+				<select
+					name="sort"
+					id=""
+				>
+					<option value="">Chose option</option>
+					<option value="name">Name</option>
+					<option value="age">Age</option>
+					<!-- <option value=""></option> -->
+				</select>
+			</div>
+			<div>
+				<div class="label_gender">Gender:</div>
+				<div class="radio_check">
+					<input
+						type="radio"
+						id="not_select"
+						name="gender"
+						:value="''"
+						:checked="genderFilter == ''"
+						@change="onSelectGender"
+					/>
+					<label for="not_select">Both</label>
+					<input
+						type="radio"
+						id="gender_male"
+						name="gender"
+						:value="'Male'"
+						:checked="genderFilter == 'Male'"
+						@change="onSelectGender"
+					/>
+					<label for="gender_male">Male</label>
+					<input
+						type="radio"
+						id="gender_female"
+						name="gender"
+						:value="'Female'"
+						:checked="genderFilter == 'Female'"
+						@change="onSelectGender"
+					/>
+					<label for="gender_female">Female</label>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="feature_wrapper">
 		<button
 			class="button_style delete"
@@ -82,5 +151,41 @@ const onChangeAmount = (event: any) => {
 	background-color: #e04040;
 	border: #e04040;
 	font-size: 16px;
+}
+.search_wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.search {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid #444040;
+	width: 400px;
+	border-radius: 10px;
+	padding: 5px;
+}
+.search input {
+	flex-grow: 1;
+	border: none;
+	outline: none;
+	padding: 10px;
+	font-size: 17px;
+	border-radius: inherit;
+}
+.search button {
+	background-color: transparent;
+	border: none;
+	border-radius: inherit;
+	cursor: pointer;
+}
+.search button:hover {
+	transform: scale(1.2);
+}
+.sort_check {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 </style>

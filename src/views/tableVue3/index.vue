@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import Table from './table/index.vue';
-import Pagination from './pagination/index.vue';
+import { computed, reactive, ref } from 'vue';
+import { useStore } from 'vuex';
 import Filter from './filter/index.vue';
 import Modal from './modal/Modal.vue';
-import { reactive, ref, computed } from 'vue';
-import { useStore } from 'vuex';
+import Pagination from './pagination/index.vue';
+import Table from './table/index.vue';
 
 const store = useStore();
-const { state, mutations, actions, getters } = store;
+const { state, getters } = store;
 
 const dataTable = computed(() => state.tableData.length);
 const chosedAll = ref(false);
@@ -21,6 +21,7 @@ const form = reactive({
 });
 
 const formEdit = reactive({
+	id: '',
 	name: '',
 	age: '',
 	gender: '',
@@ -28,18 +29,41 @@ const formEdit = reactive({
 	address: '',
 });
 
+const searchField = ref('');
+const searchProps = ref('');
+const genderFilter = ref('');
 const page = reactive({ pageSize: '5', pageNumber: 1 });
 
 const show = ref(false);
+const showEdit = ref(false);
 
 const paginate = (dataFull: any, size: number, page: number) => {
 	return dataFull.slice((page - 1) * size, page * size);
 };
 
-const dataShow = computed(() => paginate(state.tableData, Number(page.pageSize), page.pageNumber));
+const checkContain = (target: string, checkValue: string) => {
+	return target.toLowerCase().includes(checkValue.toLowerCase());
+};
+
+const dataShow = computed(() => {
+	const arrayFilter = state.tableData.filter(
+		(item: any) =>
+			(genderFilter.value != '' ? item.gender === genderFilter.value : true) &&
+			(searchField.value !== ''
+				? checkContain(item.name, searchField.value) ||
+				  checkContain(item.phone, searchField.value) ||
+				  checkContain(item.address, searchField.value)
+				: true)
+	);
+	return paginate(arrayFilter, Number(page.pageSize), page.pageNumber);
+});
 
 const closeModal = () => {
 	show.value = false;
+};
+
+const closeModalEdit = () => {
+	showEdit.value = false;
 };
 
 const chosedAllShow = computed(() => {
@@ -49,6 +73,10 @@ const chosedAllShow = computed(() => {
 		return false;
 	}
 });
+
+const onSearch = () => {
+	searchField.value = searchProps.value;
+};
 
 const addHandle = () => {
 	store.commit('addPerson', {
@@ -102,6 +130,28 @@ const onChosedHandle = (value: number) => {
 const onDelete = () => {
 	store.commit('deletePerson', { deleteArr: chosedList.value });
 };
+
+const onDeleteOne = (value: number) => {
+	store.commit('deletePerson', { deleteArr: [value] });
+};
+
+const onGetDetail = (value: number) => {
+	const person = getters.getPerson(value);
+	Object.assign(formEdit, {
+		id: person.id,
+		name: person.name,
+		age: person.age,
+		gender: person.gender,
+		phone: person.phone,
+		address: person.address,
+	});
+	showEdit.value = true;
+};
+
+const saveHandle = () => {
+	store.commit('updatePerson', formEdit);
+	closeModalEdit();
+};
 </script>
 <template>
 	<div>
@@ -110,7 +160,10 @@ const onDelete = () => {
 				@handle-add="openModal"
 				@change-amount="changeAmount"
 				@delete="onDelete"
+				@search="onSearch"
 				:amount="page.pageSize"
+				v-model:search-field="searchProps"
+				v-model:gender-filter="genderFilter"
 			/>
 		</div>
 		<div class="table_wrapper">
@@ -120,6 +173,8 @@ const onDelete = () => {
 				:chosedAll="chosedAllShow"
 				@chosed-handle="onChosedHandle"
 				@chosed-all="onChosedAll"
+				@delete-person="onDeleteOne"
+				@edit-person="onGetDetail"
 			/>
 		</div>
 		<div class="pagination_wrapper">
@@ -162,8 +217,8 @@ const onDelete = () => {
 					v-model="form.gender"
 				>
 					<option value="">Chose your gender</option>
-					<option value="male">Male</option>
-					<option value="female">Female</option>
+					<option value="Male">Male</option>
+					<option value="Female">Female</option>
 				</select>
 			</div>
 
@@ -178,6 +233,61 @@ const onDelete = () => {
 				<span class="label_style">Address: </span>
 				<input
 					v-model="form.address"
+					class="input_style"
+				/>
+			</div>
+		</template>
+	</Modal>
+
+	<!-- modal Edit -->
+	<Modal
+		:show="showEdit"
+		@closeModal="closeModalEdit"
+		@save="saveHandle"
+	>
+		<template #modal-content>
+			<div class="mt-1 name_age">
+				<div class="flex_style">
+					<span class="label_style">Name: </span>
+					<input
+						v-model="formEdit.name"
+						class="input_style"
+					/>
+				</div>
+				<div class="flex_style">
+					<span class="label_style">Age: </span>
+					<input
+						v-model="formEdit.age"
+						class="input_style"
+					/>
+				</div>
+			</div>
+
+			<div class="mt-1 flex_style">
+				<span class="label_style">Gender: </span>
+				<select
+					class="input_style"
+					name=""
+					id=""
+					v-model="formEdit.gender"
+				>
+					<option value="">Chose your gender</option>
+					<option value="Male">Male</option>
+					<option value="Female">Female</option>
+				</select>
+			</div>
+
+			<div class="mt-1 flex_style">
+				<span class="label_style">Phone number: </span>
+				<input
+					v-model="formEdit.phone"
+					class="input_style"
+				/>
+			</div>
+			<div class="mt-1 flex_style">
+				<span class="label_style">Address: </span>
+				<input
+					v-model="formEdit.address"
 					class="input_style"
 				/>
 			</div>

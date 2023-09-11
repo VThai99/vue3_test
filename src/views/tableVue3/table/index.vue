@@ -1,21 +1,24 @@
 <script setup lang="ts">
+import IconEdit from '@/components/icons/IconEdit.vue';
+import IconDelete from '@/components/icons/IconDelete.vue';
 import { computed } from 'vue';
-import { useStore } from 'vuex';
 const props = defineProps<{
 	data?: any;
 	chosedAll: boolean;
 	chosedList: any;
 }>();
-const emit = defineEmits(['chosedHandle', 'chosedAll']);
+const emit = defineEmits(['chosedHandle', 'chosedAll', 'editPerson', 'deletePerson']);
 const data = computed(() => props.data);
 const chosedArr = computed(() => props.chosedList);
 const chosedAllCom = computed(() => props.chosedAll);
-const store = useStore();
 const updateChosed = (value: number) => {
 	emit('chosedHandle', value);
 };
 const handleGetPerson = (id: number) => {
-	
+	emit('editPerson', id);
+};
+const handleDeletePerson = (id: number) => {
+	emit('deletePerson', id);
 };
 </script>
 <template>
@@ -62,16 +65,23 @@ const handleGetPerson = (id: number) => {
 					<td>{{ item.gender }}</td>
 					<td>{{ item.phone }}</td>
 					<td>{{ item.address }}</td>
-					<td>
+					<td class="action_style">
 						<span
 							@click="
 								() => {
 									handleGetPerson(item.id);
 								}
 							"
-							>Edit</span
-						>
-						<span>Delete</span>
+							><IconEdit
+						/></span>
+						<span
+							@click="
+								() => {
+									handleDeletePerson(item.id);
+								}
+							"
+							><IconDelete
+						/></span>
 					</td>
 				</tr>
 			</tbody>
@@ -90,5 +100,17 @@ const handleGetPerson = (id: number) => {
 	background-color: rgba(24, 24, 31, 0.712);
 	color: #fff;
 	font-size: 18px;
+}
+.action_style {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+.action_style span{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
 }
 </style>
