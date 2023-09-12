@@ -29,6 +29,10 @@ const formEdit = reactive({
 	address: '',
 });
 
+const orderBy = reactive({
+	field: 'name',
+	isIncrease: true,
+});
 const searchField = ref('');
 const searchProps = ref('');
 const genderFilter = ref('');
@@ -45,6 +49,16 @@ const checkContain = (target: string, checkValue: string) => {
 	return target.toLowerCase().includes(checkValue.toLowerCase());
 };
 
+const sortData = (arrayInput: any, fieldSort: string, increase: boolean) => {
+	const sortArr = arrayInput.toSorted((itemA: any, itemB: any) =>
+		itemA[fieldSort].toLowerCase().localeCompare(itemB[fieldSort].toLowerCase())
+	);
+	if (increase) {
+		return sortArr;
+	}
+	return sortArr.toReversed();
+};
+
 const dataShow = computed(() => {
 	const arrayFilter = state.tableData.filter(
 		(item: any) =>
@@ -55,7 +69,12 @@ const dataShow = computed(() => {
 				  checkContain(item.address, searchField.value)
 				: true)
 	);
-	return paginate(arrayFilter, Number(page.pageSize), page.pageNumber);
+
+	return paginate(
+		sortData(arrayFilter, orderBy.field, orderBy.isIncrease),
+		Number(page.pageSize),
+		page.pageNumber
+	);
 });
 
 const closeModal = () => {
@@ -152,6 +171,10 @@ const saveHandle = () => {
 	store.commit('updatePerson', formEdit);
 	closeModalEdit();
 };
+
+const onChangeSort = (value: { fieldSort: string; isIncrease: boolean }) => {
+	Object.assign(orderBy, { field: value.fieldSort, isIncrease: value.isIncrease });
+};
 </script>
 <template>
 	<div>
@@ -171,10 +194,13 @@ const saveHandle = () => {
 				:data="dataShow"
 				:chosedList="chosedList"
 				:chosedAll="chosedAllShow"
+				:orderField="orderBy.field"
+				:orderDirection="orderBy.isIncrease"
 				@chosed-handle="onChosedHandle"
 				@chosed-all="onChosedAll"
 				@delete-person="onDeleteOne"
 				@edit-person="onGetDetail"
+				@on-change-sort="onChangeSort"
 			/>
 		</div>
 		<div class="pagination_wrapper">
