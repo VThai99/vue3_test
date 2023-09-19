@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import IconSearch from '@/components/icons/IconSearch.vue';
 const props = defineProps<{
 	amount?: string;
@@ -19,9 +19,16 @@ const onChangeAmount = (event: any) => {
 	const amount = event.target.value;
 	emit('changeAmount', amount);
 };
+const test = ref();
 const onInput = (event: any) => {
 	emit('update:searchField', event.target.value);
 };
+
+onMounted(() => {
+	console.log("mounted");
+	
+	test.value?.focus()
+});
 
 const onSelectGender = (event: any) => {
 	emit('update:genderFilter', event.target.value);
@@ -31,6 +38,7 @@ const onSelectGender = (event: any) => {
 	<div class="search_wrapper">
 		<div class="search">
 			<input
+				ref="test"
 				:value="searchField"
 				@input="onInput"
 				type="text"
@@ -174,17 +182,17 @@ const onSelectGender = (event: any) => {
 .search button:hover {
 	transform: scale(1.2);
 }
-.radio_wrapper{
+.radio_wrapper {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 20px;
 }
-.label_gender{
+.label_gender {
 	font-weight: bold;
 }
 
-.radio_check{
+.radio_check {
 	display: flex;
 	gap: 5px;
 }
