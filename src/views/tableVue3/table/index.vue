@@ -3,10 +3,8 @@ import IconEdit from '@/components/icons/IconEdit.vue';
 import IconDelete from '@/components/icons/IconDelete.vue';
 import IconUp from '@/components/icons/IconUp.vue';
 import IconDown from '@/components/icons/IconDown.vue';
-
-import { computed } from 'vue';
 const props = defineProps<{
-	data?: any;
+	data: any;
 	chosedAll: boolean;
 	chosedList: any;
 	orderField: string;
@@ -19,9 +17,6 @@ const emit = defineEmits([
 	'deletePerson',
 	'onChangeSort',
 ]);
-const data = computed(() => props.data);
-const chosedArr = computed(() => props.chosedList);
-const chosedAllCom = computed(() => props.chosedAll);
 const updateChosed = (value: number) => {
 	emit('chosedHandle', value);
 };
@@ -41,48 +36,73 @@ const handleSort = (field: string) => {
 </script>
 <template>
 	<div>
-		<table
-			border="1"
-			class="table_style"
-		>
-			<thead>
+		<table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+			<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 				<tr>
-					<td>
+					<th
+						scope="col"
+						class="px-6 py-3"
+					>
 						<input
 							type="checkbox"
-							:checked="chosedAllCom"
+							:checked="chosedAll"
 							@change="emit('chosedAll')"
 						/>
-					</td>
-					<td @click="handleSort('name')">
+					</th>
+					<th
+						scope="col"
+						class="px-6 py-3"
+						@click="handleSort('name')"
+					>
 						Name
 						<span v-if="orderField == 'name' && orderDirection"><IconUp /></span>
 						<span v-if="orderField == 'name' && !orderDirection"><IconDown /></span>
-					</td>
-					<td @click="handleSort('age')">
+					</th>
+					<th
+						scope="col"
+						class="px-6 py-3"
+						@click="handleSort('age')"
+					>
 						Age
 						<span v-if="orderField == 'age' && orderDirection"><IconUp /></span>
 						<span v-if="orderField == 'age' && !orderDirection"><IconDown /></span>
-					</td>
-					<td @click="handleSort('gender')">
+					</th>
+					<th
+						scope="col"
+						class="px-6 py-3"
+						@click="handleSort('gender')"
+					>
 						Gender
 						<span v-if="orderField == 'gender' && orderDirection"><IconUp /></span>
 						<span v-if="orderField == 'gender' && !orderDirection"><IconDown /></span>
-					</td>
-					<td @click="handleSort('phone')">
+					</th>
+					<th
+						scope="col"
+						class="px-6 py-3"
+						@click="handleSort('phone')"
+					>
 						Phone Number
 						<span v-if="orderField == 'phone' && orderDirection"><IconUp /></span>
 						<span v-if="orderField == 'phone' && !orderDirection"><IconDown /></span>
-					</td>
-					<td @click="handleSort('address')">
+					</th>
+					<th
+						scope="col"
+						class="px-6 py-3"
+						@click="handleSort('address')"
+					>
 						Address
 						<span v-if="orderField == 'address' && orderDirection"><IconUp /></span>
 						<span v-if="orderField == 'address' && !orderDirection"><IconDown /></span>
-					</td>
-					<td>Action</td>
+					</th>
+					<th
+						scope="col"
+						class="px-6 py-3"
+					>
+						Action
+					</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
 				<tr
 					v-for="item in data"
 					:key="item.id"
@@ -90,7 +110,7 @@ const handleSort = (field: string) => {
 					<td>
 						<input
 							type="checkbox"
-							:checked="chosedArr.includes(item.id)"
+							:checked="chosedList.includes(item.id)"
 							@change="
 								() => {
 									updateChosed(item.id);
@@ -127,7 +147,7 @@ const handleSort = (field: string) => {
 	</div>
 </template>
 <style>
-.table_style {
+/* .table_style {
 	width: 100%;
 	text-align: center;
 	font-size: 13px;
@@ -153,5 +173,5 @@ const handleSort = (field: string) => {
 }
 thead tr td {
 	cursor: pointer;
-}
+} */
 </style>

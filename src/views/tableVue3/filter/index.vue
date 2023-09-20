@@ -1,50 +1,38 @@
-<script setup lang="ts">
-import { computed, ref, onMounted } from 'vue';
+<script lang="ts">
 import IconSearch from '@/components/icons/IconSearch.vue';
-const props = defineProps<{
-	amount?: string;
-	searchField: string;
-	genderFilter: string;
-}>();
-const amountItem = computed(() => props.amount);
-const emit = defineEmits([
-	'search',
-	'handleAdd',
-	'changeAmount',
-	'delete',
-	'update:searchField',
-	'update:genderFilter',
-]);
-const onChangeAmount = (event: any) => {
-	const amount = event.target.value;
-	emit('changeAmount', amount);
-};
-const test = ref();
-const onInput = (event: any) => {
-	emit('update:searchField', event.target.value);
-};
+export default {
+	props: ['amount', 'searchField', 'genderFilter'],
+	components: {
+		IconSearch,
+	},
+	data() {
+		return {};
+	},
+	methods: {
+		onChangeAmount(event: any) {
+			const newAmount = event.target.value;
+			this.$emit('changeAmount', newAmount);
+		},
+		onInput(event: any) {
+			this.$emit('update:searchField', event.target.value);
+		},
 
-onMounted(() => {
-	console.log("mounted");
-	
-	test.value?.focus()
-});
-
-const onSelectGender = (event: any) => {
-	emit('update:genderFilter', event.target.value);
+		onSelectGender(event: any) {
+			this.$emit('update:genderFilter', event.target.value);
+		},
+	},
 };
 </script>
 <template>
-	<div class="search_wrapper">
+	<div class="flex justify-between items-center">
 		<div class="search">
 			<input
-				ref="test"
 				:value="searchField"
 				@input="onInput"
 				type="text"
 				placeholder="name, address, phone"
 			/>
-			<button @click="emit('search')"><IconSearch /></button>
+			<button @click="$emit('search')"><IconSearch /></button>
 		</div>
 		<div class="radio_wrapper">
 			<div class="label_gender">Gender:</div>
@@ -83,20 +71,20 @@ const onSelectGender = (event: any) => {
 	<div class="feature_wrapper mt-1">
 		<button
 			class="button_style delete"
-			@click="emit('delete')"
+			@click="$emit('delete')"
 		>
 			Delete
 		</button>
 		<button
 			class="button_style add"
-			@click="emit('handleAdd')"
+			@click="$emit('handleAdd')"
 		>
 			Add New
 		</button>
 	</div>
 	<div class="itemPerPage mt-1">
 		<select
-			:value="amountItem"
+			:value="amount"
 			name=""
 			id=""
 			@change="onChangeAmount"

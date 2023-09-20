@@ -1,33 +1,46 @@
-<script setup lang="ts">
-import { computed } from 'vue';
+<script lang="ts">
 import IconFirst from '../../../components/icons/IconFirst.vue';
 import IconLast from '../../../components/icons/IconLast.vue';
 import IconNext from '../../../components/icons/IconNext.vue';
 import IconPrevious from '../../../components/icons/IconPrevious.vue';
 // import { defineProps } from 'vue';
-const props = defineProps<{
-	pageNumber: number;
-	totalPage: number;
-}>();
-const emit = defineEmits(['changePage']);
-const pN = computed(() => props.pageNumber);
-const tP = computed(() => props.totalPage);
 
-const handleSelectPage = (item: number) => {
-	emit('changePage', item);
-};
+export default {
+	props: {
+		pageNumber: Number,
+		totalPage: Number,
+	},
+	components: {
+		IconFirst,
+		IconLast,
+		IconNext,
+		IconPrevious,
+	},
+	setup(props, { emit }) {
+		const handleSelectPage = (item: number) => {
+			emit('changePage', item);
+		};
 
-const previousPage = () => {
-	if (pN.value > 1) emit('changePage', pN.value - 1);
-};
-const nextPage = () => {
-	if (pN.value < tP.value) emit('changePage', pN.value + 1);
-};
-const firstPage = () => {
-	emit('changePage', 1);
-};
-const lastPage = () => {
-	emit('changePage', tP.value);
+		const previousPage = () => {
+			if (props.pageNumber! > 1) emit('changePage', props.pageNumber! - 1);
+		};
+		const nextPage = () => {
+			if (props.pageNumber! < props.totalPage!) emit('changePage', props.pageNumber! + 1);
+		};
+		const firstPage = () => {
+			emit('changePage', 1);
+		};
+		const lastPage = () => {
+			emit('changePage', props.totalPage);
+		};
+		return {
+			handleSelectPage,
+			previousPage,
+			nextPage,
+			firstPage,
+			lastPage,
+		};
+	},
 };
 </script>
 <template>

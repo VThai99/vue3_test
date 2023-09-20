@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import Filter from './filter/index.vue';
 import Modal from './modal/Modal.vue';
@@ -40,6 +40,14 @@ const page = reactive({ pageSize: '5', pageNumber: 1 });
 
 const show = ref(false);
 const showEdit = ref(false);
+
+watch(
+	() => page.pageSize,
+	() => {
+		page.pageNumber = 1
+	},
+	{ deep: true }
+);
 
 const paginate = (dataFull: any, size: number, page: number) => {
 	return dataFull.slice((page - 1) * size, page * size);
