@@ -1,10 +1,7 @@
 <script lang="ts">
-import IconSearch from '@/components/icons/IconSearch.vue';
 export default {
 	props: ['amount', 'searchField', 'genderFilter'],
-	components: {
-		IconSearch,
-	},
+
 	data() {
 		return {};
 	},
@@ -25,19 +22,50 @@ export default {
 </script>
 <template>
 	<div class="flex justify-between items-center">
-		<div class="search">
+		<label
+			for="default-search"
+			class="mb-2 text-sm font-medium sr-only text-white"
+			>Search</label
+		>
+		<div class="relative w-1/3">
+			<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+				<svg
+					class="w-4 h-4 text-gray-400"
+					aria-hidden="true"
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 20 20"
+				>
+					<path
+						stroke="currentColor"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+					/>
+				</svg>
+			</div>
 			<input
+				type="search"
+				id="default-search"
 				:value="searchField"
 				@input="onInput"
-				type="text"
-				placeholder="name, address, phone"
+				class="block w-full p-4 pl-10 text-sm 0 border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+				placeholder="Search name, address"
+				required
 			/>
-			<button @click="$emit('search')"><IconSearch /></button>
+			<button
+				@click="$emit('search')"
+				class="text-white absolute right-2.5 bottom-2.5 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
+			>
+				Search
+			</button>
 		</div>
-		<div class="radio_wrapper">
-			<div class="label_gender">Gender:</div>
-			<div class="radio_check">
+		<div class="flex justify-center items-center gap-5">
+			<div class="text-base font-bold">Gender:</div>
+			<div class="flex items-center gap-3">
 				<input
+					class="w-4 h-4 outline-none text-blue-600 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
 					type="radio"
 					id="not_select"
 					name="gender"
@@ -45,8 +73,13 @@ export default {
 					:checked="genderFilter == ''"
 					@change="onSelectGender"
 				/>
-				<label for="not_select">Both</label>
+				<label
+					for="not_select"
+					class="text-sm font-mediumtext-gray-900 text-gray-900"
+					>Both</label
+				>
 				<input
+					class="w-4 h-4 outline-none text-blue-600 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
 					type="radio"
 					id="gender_male"
 					name="gender"
@@ -54,8 +87,13 @@ export default {
 					:checked="genderFilter == 'Male'"
 					@change="onSelectGender"
 				/>
-				<label for="gender_male">Male</label>
+				<label
+					for="gender_male"
+					class="text-sm font-mediumtext-gray-900 text-gray-900"
+					>Male</label
+				>
 				<input
+					class="w-4 h-4 outline-none text-blue-600 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
 					type="radio"
 					id="gender_female"
 					name="gender"
@@ -63,27 +101,35 @@ export default {
 					:checked="genderFilter == 'Female'"
 					@change="onSelectGender"
 				/>
-				<label for="gender_female">Female</label>
+				<label
+					class="text-sm font-mediumtext-gray-900 text-gray-900"
+					for="gender_female"
+					>Female</label
+				>
 			</div>
 		</div>
 	</div>
 
-	<div class="feature_wrapper mt-1">
-		<button
-			class="button_style delete"
-			@click="$emit('delete')"
-		>
-			Delete
-		</button>
-		<button
-			class="button_style add"
-			@click="$emit('handleAdd')"
-		>
-			Add New
-		</button>
-	</div>
-	<div class="itemPerPage mt-1">
+	<div class="flex justify-between items-center mt-10">
+		<div>
+			<button
+				type="button"
+				@click="$emit('delete')"
+				class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-800 shadow-lg shadow-red-800/80 font-medium rounded-lg text-base px-5 py-2.5 text-center mr-2 mb-2"
+			>
+				Delete
+			</button>
+			<button
+				type="button"
+				@click="$emit('handleAdd')"
+				class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-800 shadow-lg shadow-blue-800/80 font-medium rounded-lg text-base px-5 py-2.5 text-center mr-2 mb-2"
+			>
+				Add new
+			</button>
+		</div>
+
 		<select
+			class="w-15 text-centerborder text-base rounded-lg block px-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
 			:value="amount"
 			name=""
 			id=""
@@ -95,93 +141,3 @@ export default {
 		</select>
 	</div>
 </template>
-
-<style>
-.itemPerPage {
-	padding: 0px 20px;
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-}
-
-.itemPerPage select {
-	padding: 3px;
-	border-radius: 5px;
-}
-
-.feature_wrapper {
-	padding: 0px 20px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.button_style {
-	background-color: transparent;
-	border: 2px solid rgb(29, 25, 25);
-	color: rgb(39, 28, 28);
-	font-size: 15px;
-	border-radius: 10px;
-	height: 40px;
-	width: 200px;
-	transition: all linear 0.2s;
-	font-weight: bold;
-}
-
-.add:hover {
-	background-color: #5855e6;
-	border: #5855e6;
-	font-size: 16px;
-}
-
-.delete:hover {
-	background-color: #e04040;
-	border: #e04040;
-	font-size: 16px;
-}
-.search_wrapper {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-.search {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border: 1px solid #444040;
-	width: 400px;
-	border-radius: 10px;
-	padding: 5px;
-}
-.search input {
-	flex-grow: 1;
-	border: none;
-	outline: none;
-	padding: 10px;
-	font-size: 17px;
-	border-radius: inherit;
-}
-.search button {
-	background-color: transparent;
-	border: none;
-	border-radius: inherit;
-	cursor: pointer;
-}
-.search button:hover {
-	transform: scale(1.2);
-}
-.radio_wrapper {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 20px;
-}
-.label_gender {
-	font-weight: bold;
-}
-
-.radio_check {
-	display: flex;
-	gap: 5px;
-}
-</style>

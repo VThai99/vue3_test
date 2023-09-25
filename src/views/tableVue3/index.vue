@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import Filter from './filter/index.vue';
 import Modal from './modal/Modal.vue';
@@ -44,7 +44,7 @@ const showEdit = ref(false);
 watch(
 	() => page.pageSize,
 	() => {
-		page.pageNumber = 1
+		page.pageNumber = 1;
 	},
 	{ deep: true }
 );
@@ -183,6 +183,17 @@ const saveHandle = () => {
 const onChangeSort = (value: { fieldSort: string; isIncrease: boolean }) => {
 	Object.assign(orderBy, { field: value.fieldSort, isIncrease: value.isIncrease });
 };
+
+// onMounted(() => {
+// 	const myPromise = new Promise((resolve, reject) => {
+// 		setTimeout(() => {
+// 			resolve('foo');
+// 		}, 10000);
+// 	});
+// 	myPromise.then(function (res) {
+// 		console.log(res);
+// 	});
+// });
 </script>
 <template>
 	<div>
@@ -225,27 +236,27 @@ const onChangeSort = (value: { fieldSort: string; isIncrease: boolean }) => {
 		@save="addHandle"
 	>
 		<template #modal-content>
-			<div class="mt-1 name_age">
-				<div class="flex_style">
-					<span class="label_style">Name: </span>
+			<div class="mt-3 flex justify-between items-center">
+				<div class="flex justify-start items-center">
+					<span class="font-bold mr-1 w-36 block">Name: </span>
 					<input
 						v-model="form.name"
-						class="input_style"
+						class="flex-grow block p-2 pl-10 text-sm 0 border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
 					/>
 				</div>
-				<div class="flex_style">
-					<span class="label_style">Age: </span>
+				<div class="flex justify-start items-center">
+					<span class="font-bold mr-1 w-36 block">Age: </span>
 					<input
 						v-model="form.age"
-						class="input_style"
+						class="block w-full p-2 pl-10 text-sm 0 border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
 					/>
 				</div>
 			</div>
 
-			<div class="mt-1 flex_style">
-				<span class="label_style">Gender: </span>
+			<div class="mt-1 flex justify-start items-center">
+				<span class="font-bold mr-1 w-36 block">Gender: </span>
 				<select
-					class="input_style"
+					class="block w-full p-2 pl-10 text-sm 0 border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
 					name=""
 					id=""
 					v-model="form.gender"
@@ -256,18 +267,18 @@ const onChangeSort = (value: { fieldSort: string; isIncrease: boolean }) => {
 				</select>
 			</div>
 
-			<div class="mt-1 flex_style">
-				<span class="label_style">Phone number: </span>
+			<div class="mt-1 flex justify-start items-center">
+				<span class="font-bold mr-1 w-36 block">Phone number: </span>
 				<input
 					v-model="form.phone"
-					class="input_style"
+					class="block w-full p-2 pl-10 text-sm 0 border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
 				/>
 			</div>
-			<div class="mt-1 flex_style">
-				<span class="label_style">Address: </span>
+			<div class="mt-1 flex justify-start items-center">
+				<span class="font-bold mr-1 w-36 block">Address: </span>
 				<input
 					v-model="form.address"
-					class="input_style"
+					class="block w-full p-2 pl-10 text-sm 0 border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
 				/>
 			</div>
 		</template>
@@ -280,27 +291,27 @@ const onChangeSort = (value: { fieldSort: string; isIncrease: boolean }) => {
 		@save="saveHandle"
 	>
 		<template #modal-content>
-			<div class="mt-1 name_age">
-				<div class="flex_style">
-					<span class="label_style">Name: </span>
+			<div class="mt-3 flex justify-between items-center">
+				<div class="flex justify-start items-center">
+					<span class="font-bold mr-1 w-36 block">Name: </span>
 					<input
+						class="block w-full p-2 pl-10 text-sm 0 border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
 						v-model="formEdit.name"
-						class="input_style"
 					/>
 				</div>
-				<div class="flex_style">
-					<span class="label_style">Age: </span>
+				<div class="flex justify-start items-center">
+					<span class="font-bold mr-1 w-36 block">Age: </span>
 					<input
 						v-model="formEdit.age"
-						class="input_style"
+						class="block w-full p-2 pl-10 text-sm 0 border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
 					/>
 				</div>
 			</div>
 
-			<div class="mt-1 flex_style">
-				<span class="label_style">Gender: </span>
+			<div class="mt-1 flex justify-start items-center">
+				<span class="font-bold mr-1 w-36 block">Gender: </span>
 				<select
-					class="input_style"
+					class="block w-full p-2 pl-10 text-sm 0 border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
 					name=""
 					id=""
 					v-model="formEdit.gender"
@@ -311,18 +322,18 @@ const onChangeSort = (value: { fieldSort: string; isIncrease: boolean }) => {
 				</select>
 			</div>
 
-			<div class="mt-1 flex_style">
-				<span class="label_style">Phone number: </span>
+			<div class="mt-1 flex justify-start items-center">
+				<span class="font-bold mr-1 w-36 block">Phone number: </span>
 				<input
 					v-model="formEdit.phone"
-					class="input_style"
+					class="block w-full p-2 pl-10 text-sm 0 border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
 				/>
 			</div>
-			<div class="mt-1 flex_style">
-				<span class="label_style">Address: </span>
+			<div class="mt-1 flex justify-start items-center">
+				<span class="font-bold mr-1 w-36 block">Address: </span>
 				<input
 					v-model="formEdit.address"
-					class="input_style"
+					class="block w-full p-2 pl-10 text-sm 0 border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
 				/>
 			</div>
 		</template>
@@ -340,32 +351,5 @@ const onChangeSort = (value: { fieldSort: string; isIncrease: boolean }) => {
 
 .pagination_wrapper {
 	margin-top: 1rem;
-}
-
-.input_style {
-	border-radius: 5px;
-	border: 1px solid #331515;
-	padding: 5px 10px;
-	font-size: 12px;
-	flex-grow: 1;
-}
-
-.label_style {
-	font-weight: bold;
-	margin-right: 5px;
-	width: 120px;
-	display: block;
-}
-
-.name_age {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.flex_style {
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
 }
 </style>

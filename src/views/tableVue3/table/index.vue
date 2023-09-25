@@ -36,12 +36,12 @@ const handleSort = (field: string) => {
 </script>
 <template>
 	<div>
-		<table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+		<table class="table-fixed w-full text-sm text-center text-gray-500 dark:text-gray-400">
 			<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 				<tr>
 					<th
 						scope="col"
-						class="px-6 py-3"
+						class="px-6 py-3 w-1"
 					>
 						<input
 							type="checkbox"
@@ -54,45 +54,55 @@ const handleSort = (field: string) => {
 						class="px-6 py-3"
 						@click="handleSort('name')"
 					>
-						Name
-						<span v-if="orderField == 'name' && orderDirection"><IconUp /></span>
-						<span v-if="orderField == 'name' && !orderDirection"><IconDown /></span>
+						<div class="flex justify-center items-center gap-2">
+							Name
+							<span v-if="orderField == 'name' && orderDirection"><IconUp /></span>
+							<span v-if="orderField == 'name' && !orderDirection"><IconDown /></span>
+						</div>
 					</th>
 					<th
 						scope="col"
 						class="px-6 py-3"
 						@click="handleSort('age')"
 					>
-						Age
-						<span v-if="orderField == 'age' && orderDirection"><IconUp /></span>
-						<span v-if="orderField == 'age' && !orderDirection"><IconDown /></span>
+						<div class="flex justify-center items-center gap-2">
+							Age
+							<span v-if="orderField == 'age' && orderDirection"><IconUp /></span>
+							<span v-if="orderField == 'age' && !orderDirection"><IconDown /></span>
+						</div>
 					</th>
 					<th
 						scope="col"
 						class="px-6 py-3"
 						@click="handleSort('gender')"
 					>
-						Gender
-						<span v-if="orderField == 'gender' && orderDirection"><IconUp /></span>
-						<span v-if="orderField == 'gender' && !orderDirection"><IconDown /></span>
+						<div class="flex justify-center items-center gap-2">
+							Gender
+							<span v-if="orderField == 'gender' && orderDirection"><IconUp /></span>
+							<span v-if="orderField == 'gender' && !orderDirection"><IconDown /></span>
+						</div>
 					</th>
 					<th
 						scope="col"
 						class="px-6 py-3"
 						@click="handleSort('phone')"
 					>
-						Phone Number
-						<span v-if="orderField == 'phone' && orderDirection"><IconUp /></span>
-						<span v-if="orderField == 'phone' && !orderDirection"><IconDown /></span>
+						<div class="flex justify-center items-center gap-2">
+							Phone Number
+							<span v-if="orderField == 'phone' && orderDirection"><IconUp /></span>
+							<span v-if="orderField == 'phone' && !orderDirection"><IconDown /></span>
+						</div>
 					</th>
 					<th
 						scope="col"
 						class="px-6 py-3"
 						@click="handleSort('address')"
 					>
-						Address
-						<span v-if="orderField == 'address' && orderDirection"><IconUp /></span>
-						<span v-if="orderField == 'address' && !orderDirection"><IconDown /></span>
+						<div class="flex justify-center items-center gap-2">
+							Address
+							<span v-if="orderField == 'address' && orderDirection"><IconUp /></span>
+							<span v-if="orderField == 'address' && !orderDirection"><IconDown /></span>
+						</div>
 					</th>
 					<th
 						scope="col"
@@ -102,12 +112,12 @@ const handleSort = (field: string) => {
 					</th>
 				</tr>
 			</thead>
-			<tbody class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+			<tbody>
 				<tr
 					v-for="item in data"
 					:key="item.id"
 				>
-					<td>
+					<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center">
 						<input
 							type="checkbox"
 							:checked="chosedList.includes(item.id)"
@@ -118,13 +128,26 @@ const handleSort = (field: string) => {
 							"
 						/>
 					</td>
-					<td>{{ item.name }}</td>
-					<td>{{ item.age }}</td>
-					<td>{{ item.gender }}</td>
-					<td>{{ item.phone }}</td>
-					<td>{{ item.address }}</td>
-					<td class="action_style">
+					<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center">
+						{{ item.name }}
+					</td>
+					<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center">
+						{{ item.age }}
+					</td>
+					<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center">
+						{{ item.gender }}
+					</td>
+					<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center">
+						{{ item.phone }}
+					</td>
+					<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center">
+						{{ item.address }}
+					</td>
+					<td
+						class="flex justify-center items-center gap-2 px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center"
+					>
 						<span
+							class="cursor-pointer"
 							@click="
 								() => {
 									handleGetPerson(item.id);
@@ -133,6 +156,7 @@ const handleSort = (field: string) => {
 							><IconEdit
 						/></span>
 						<span
+							class="cursor-pointer"
 							@click="
 								() => {
 									handleDeletePerson(item.id);
@@ -146,32 +170,3 @@ const handleSort = (field: string) => {
 		</table>
 	</div>
 </template>
-<style>
-/* .table_style {
-	width: 100%;
-	text-align: center;
-	font-size: 13px;
-	border-radius: 10px;
-}
-
-.table_style thead {
-	background-color: rgba(24, 24, 31, 0.712);
-	color: #fff;
-	font-size: 18px;
-}
-.action_style {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 10px;
-}
-.action_style span {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
-}
-thead tr td {
-	cursor: pointer;
-} */
-</style>

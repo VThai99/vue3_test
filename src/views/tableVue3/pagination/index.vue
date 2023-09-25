@@ -42,85 +42,59 @@ export default {
 		};
 	},
 };
+// :class="[item === pageNumber ? 'active' : '', 'page_item']"
 </script>
 <template>
-	<div class="page_nav">
-		<li
-			class="page_item"
-			@click="firstPage"
-		>
-			<IconFirst />
-		</li>
-		<li
-			class="page_item"
-			@click="previousPage"
-		>
-			<IconPrevious />
-		</li>
-		<li
-			class="prefix"
-			v-if="pageNumber - 2 > 1"
-		>
-			...
-		</li>
-		<template
-			v-for="item in totalPage"
-			:key="item"
-		>
+	<nav>
+		<ul class="inline-flex -space-x-px text-base h-10">
 			<li
-				:class="[item === pageNumber ? 'active' : '', 'page_item']"
-				v-if="pageNumber - 2 <= item && item <= pageNumber + 2"
-				@click="handleSelectPage(item)"
+				class="flex items-center justify-center px-4 h-10 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+				@click="firstPage"
 			>
-				{{ item }}
+				<IconFirst />
 			</li>
-		</template>
-		<li
-			class="prefix"
-			v-if="pageNumber + 2 < totalPage"
-		>
-			...
-		</li>
-		<li
-			class="page_item"
-			@click="nextPage"
-		>
-			<IconNext />
-		</li>
-		<li
-			class="page_item"
-			@click="lastPage"
-		>
-			<IconLast />
-		</li>
-	</div>
+			<li
+				class="flex items-center justify-center px-4 h-10 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+				@click="previousPage"
+			>
+				<IconPrevious />
+			</li>
+			<li
+				class="flex items-center justify-center px-4 h-10 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+				v-if="pageNumber - 2 > 1"
+			>
+				...
+			</li>
+			<template
+				v-for="item in totalPage"
+				:key="item"
+			>
+				<li
+					class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+					v-if="pageNumber - 2 <= item && item <= pageNumber + 2"
+					@click="handleSelectPage(item)"
+				>
+					{{ item }}
+				</li>
+			</template>
+			<li
+				class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
+				v-if="pageNumber + 2 < totalPage"
+			>
+				...
+			</li>
+			<li
+				class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
+				@click="nextPage"
+			>
+				<IconNext />
+			</li>
+			<li
+				class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
+				@click="lastPage"
+			>
+				<IconLast />
+			</li>
+		</ul>
+	</nav>
 </template>
-<style>
-.page_nav {
-	display: flex;
-	gap: 10px;
-}
-.page_item {
-	font-size: 13px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 5px;
-	cursor: pointer;
-	border: 1px dashed black;
-}
-.page_item:hover {
-	background: red;
-}
-.prefix {
-	border: none;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 5px;
-}
-.active {
-	background: blue;
-	color: white;
-}
-</style>
